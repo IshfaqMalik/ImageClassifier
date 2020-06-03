@@ -40,17 +40,21 @@ def train_network(model, trainloader, validloader,optimizer,criterion, epochs, g
     
     
     model.to(device)
+    model.train()
     
     training_loss, valid_loss = 0, 0
     valid_accuracy = 0
     
-    validation_step = True
+    #validation_step = True
     
+    print_every = 50
+    steps = 0
     
     
     for epoch in range(epochs):
         for inputs, labels in trainloader:
             inputs, labels = inputs.to(device), labels.to(device)
+            steps += 1
             optimizer.zero_grad(),
             logps = model.forward(inputs)
             loss = criterion(logps, labels)
@@ -61,7 +65,8 @@ def train_network(model, trainloader, validloader,optimizer,criterion, epochs, g
             
             #checking validation 
             
-            if validation_step == True:
+            if steps % print_every == 0:
+                
                 model.eval()
                 
                 with torch.no_grad():
