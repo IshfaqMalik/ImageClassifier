@@ -96,7 +96,7 @@ def train_network(model, trainloader, validloader,optimizer,criterion, epochs, g
                         print("\n    Validation:\n      Loss: {:.4f}  ".format(valid_loss / len(validloader)),
                               "Accuracy: {:.4f}".format(valid_accuracy / len(validloader)))
     
-    
+                training_loss = 0
                 model.train()
    
 
