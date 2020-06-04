@@ -47,14 +47,17 @@ def train_network(model, trainloader, validloader,optimizer,criterion, epochs, g
     
     #validation_step = True
     
-    print_every = 50
+    print_every = 30
     steps = 0
     
     
     for epoch in range(epochs):
+        print("Epoch")
         for inputs, labels in trainloader:
-            inputs, labels = inputs.to(device), labels.to(device)
+            print("Step")
             steps += 1
+            inputs, labels = inputs.to(device), labels.to(device)
+            
             optimizer.zero_grad(),
             logps = model.forward(inputs)
             loss = criterion(logps, labels)
@@ -82,12 +85,13 @@ def train_network(model, trainloader, validloader,optimizer,criterion, epochs, g
                         equals = top_class == labels.view(*top_class.shape)
                         valid_accuracy = valid_accuracy + torch.mean(equals.type(torch.FloatTensor)).item()
                         
+                                             
     
-    print('\nEpoch: {}/{} '.format(epoch + 1, epochs),
-          '\n    Training:\n      Loss: {:.4f}  '.format(training_loss / len(trainloader)))
+                        print('\nEpoch: {}/{} '.format(epoch + 1, epochs),
+                               '\n    Training:\n      Loss: {:.4f}  '.format(training_loss / len(trainloader)))
     
-    print("\n    Validation:\n      Loss: {:.4f}  ".format(valid_loss / len(validloader)),
-          "Accuracy: {:.4f}".format(valid_accuracy / len(validloader)))
+                        print("\n    Validation:\n      Loss: {:.4f}  ".format(valid_loss / len(validloader)),
+                        "Accuracy: {:.4f}".format(valid_accuracy / len(validloader)))
     
     
     model.train()
