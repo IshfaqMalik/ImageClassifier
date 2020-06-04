@@ -42,8 +42,8 @@ def train_network(model, trainloader, validloader,optimizer,criterion, epochs, g
     model.to(device)
     model.train()
     
-    training_loss, valid_loss = 0, 0
-    valid_accuracy = 0
+  
+    
     
     #validation_step = True
     
@@ -53,12 +53,13 @@ def train_network(model, trainloader, validloader,optimizer,criterion, epochs, g
     
     for epoch in range(epochs):
         print("Epoch")
+        training_loss = 0
         for inputs, labels in trainloader:
             print("Step")
             steps += 1
             inputs, labels = inputs.to(device), labels.to(device)
             
-            optimizer.zero_grad(),
+            optimizer.zero_grad()
             logps = model.forward(inputs)
             loss = criterion(logps, labels)
             loss.backward()
@@ -69,8 +70,10 @@ def train_network(model, trainloader, validloader,optimizer,criterion, epochs, g
             #checking validation 
             
             if steps % print_every == 0:
-                
-                model.eval()
+                valid_loss = 0
+                valid_accuracy = 0
+                model.eval()             
+               
                 
                 with torch.no_grad():
                     for inputs, labels in validloader:
@@ -91,10 +94,10 @@ def train_network(model, trainloader, validloader,optimizer,criterion, epochs, g
                                '\n    Training:\n      Loss: {:.4f}  '.format(training_loss / len(trainloader)))
     
                         print("\n    Validation:\n      Loss: {:.4f}  ".format(valid_loss / len(validloader)),
-                        "Accuracy: {:.4f}".format(valid_accuracy / len(validloader)))
+                              "Accuracy: {:.4f}".format(valid_accuracy / len(validloader)))
     
     
-    model.train()
+                model.train()
    
 
 
