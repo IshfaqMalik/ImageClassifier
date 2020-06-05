@@ -5,29 +5,24 @@ import torch
 from torch import nn, optim
 
 from torchvision import models
-
+from collections import OrderedDict
 import torch.nn.functional as F
 import time
 
 import numpy as np
 
-class Network(nn.Module):
-    def __init__(self, input_units, output_units, hidden_units, drop_p):
-        super().__init__()
-        self.hidden_layers = nn.ModuleList([nn.Linear(input_units, hidden_units[0])])
 
-        #create hidden layers
-        layer_sizes = zip(hidden_units[:-1], hidden_units[1:]) #gives input/output units for each layer
-        self.hidden_layers.extend([nn.Linear(h1, h2) for h1, h2 in layer_sizes])
-        self.output = nn.Linear(hidden_units[-1], output_units)
-        self.dropout = nn.Dropout(p=drop_p)
     
-    def forward(self, x):
-        for each in self.hidden_layers:
-            x = F.relu(each(x)) #apply relu to each hidden node
-            x = self.dropout(x) #apply dropout
-        x = self.output(x) #apply output weights
-        return F.log_softmax(x, dim=1) 
+def network (input_units, output_units, hidden_units, drop_p):
+    classifier = nn.Sequential(OrderedDict([
+        ('fc1', nn.Linear(input_units, hidden_units)),
+        ('relu', nn.ReLU()),
+        ('dropout', nn.Dropout(p = drop_p)),
+    
+        ('fc2', nn.Linear(hidden_units, output_units)),
+        ('output', nn.LogSoftmax(dim=1))]))
+    
+    return classifier
     
     
 def train_network(model, trainloader, validloader,optimizer,criterion, epochs, gpu):
@@ -53,8 +48,10 @@ def train_network(model, trainloader, validloader,optimizer,criterion, epochs, g
     
     for epoch in range(epochs):
         print("Epoch")
+        
         training_loss = 0
-        for inputs, labels in trainloader:
+        
+        for ii, (inputs,labels) in enumerate(trainloader):
             print("Step")
             steps += 1
             inputs, labels = inputs.to(device), labels.to(device)
@@ -90,11 +87,11 @@ def train_network(model, trainloader, validloader,optimizer,criterion, epochs, g
                         
                                              
     
-                        print('\nEpoch: {}/{} '.format(epoch + 1, epochs),
-                               '\n    Training:\n      Loss: {:.4f}  '.format(training_loss / len(trainloader)))
+                print('\nEpoch: {}/{} '.format(epoch + 1, epochs),
+                      '\n    Training:\n      Loss: {:.4f}  '.format(training_loss / print_every))
     
-                        print("\n    Validation:\n      Loss: {:.4f}  ".format(valid_loss / len(validloader)),
-                              "Accuracy: {:.4f}".format(valid_accuracy / len(validloader)))
+                print("\n    Validation:\n      Loss: {:.4f}  ".format(valid_loss / len(validloader)),
+                      "Accuracy: {:.4f}".format(valid_accuracy / len(validloader)))
     
                 training_loss = 0
                 model.train()
