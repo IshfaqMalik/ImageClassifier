@@ -8,7 +8,7 @@ from torchvision import models
 from collections import OrderedDict
 import torch.nn.functional as F
 import time
-
+import utils
 import numpy as np
 
 
@@ -40,7 +40,7 @@ def train_network(model, trainloader, validloader,optimizer,criterion, epochs, g
   
     
     
-    #validation_step = True
+  #  validation_step = True
     
     print_every = 30
     steps = 0
@@ -67,6 +67,7 @@ def train_network(model, trainloader, validloader,optimizer,criterion, epochs, g
             #checking validation 
             
             if steps % print_every == 0:
+           
                 valid_loss = 0
                 valid_accuracy = 0
                 model.eval()             
@@ -101,11 +102,11 @@ def train_network(model, trainloader, validloader,optimizer,criterion, epochs, g
 def save_checkpoint(model,train_data,optimizer, save_dir,arch):
     
     
+    
     model_checkpoint = {'arch':arch,
                         
-                        'input_size': input_features,
-                        'output_size': output_units,
-                        'learning_rate': 0.01,       
+                        
+                        'learning_rate': 0.003,       
                         'batch_size': 64,
                         'classifier' : model.classifier,
                         'optimizer': optimizer.state_dict(),
@@ -120,9 +121,10 @@ def load_model (file_path, gpu):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     else: 
         device = "cpu"
+        
     checkpoint = torch.load(file_path)
     learning_rate = checkpoint['learning_rate']
-    model = getattr(models, checkpoint['arch'])(pretrained=True)
+    model = utils.network_model(checkpoint['arch'])
     model.classifier = checkpoint['classifier']
     model.optimizer = checkpoint['optimizer']
     model.load_state_dict(checkpoint['state_dict'])
@@ -191,7 +193,7 @@ def test_network (model,loader, criterion,gpu):
         test_accuracy = 0
         
         model.eval()
-        for inputs, labels in testloader:
+        for inputs, labels in loader:
             inputs, labels = inputs.to(device), labels.to(device)
             logps = model.forward(inputs)
             loss = criterion(logps,labels)
