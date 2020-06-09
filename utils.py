@@ -10,9 +10,9 @@ def process_image(image):
     
     
     
-    img = Image.open(image_path)
+    img = Image.open(image)
     
-    transform = transfoems.Compose([transform.Resize(255),
+    transform = transforms.Compose([transforms.Resize(255),
                                     transforms.CenterCrop(224),
                                     transforms.ToTensor()])
                                   
@@ -92,7 +92,7 @@ def resultdisplay(image, probs, classes, top_k):
     return ax
 
 def get_class(classes, checkpoint, category_names):
-    class_to_idx = torch.load(checkpoint)['class_idx'] 
+    class_to_idx = torch.load(checkpoint) ['class_to_idx']
     idx_to_class = {idx: pic for pic, idx in class_to_idx.items()} #geta dict with mapping (class index, class 'name')
     
     if(category_names != None): #take index number, change to class number, and then to flower name
