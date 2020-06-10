@@ -111,7 +111,8 @@ def get_class(classes, checkpoint, category_names):
         class_id = []
         for i in classes:
             class_id.append(idx_to_class[i])
-        return class_id    
+        return class_id 
+    
     
 def show_classes(prob, classes, top_k):
     

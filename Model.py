@@ -167,7 +167,7 @@ def predict(image_path, model, topk):
     # 0 -> probabilities
     # 1 -> index
     prob = torch.topk(probabilities, topk)[0].tolist()[0] # probabilities
-    index = torch.topk(probabilities, topk)[1].tolist()[0] # index
+    classes = torch.topk(probabilities, topk)[1].tolist()[0] # index
     
     ind = []
     for i in range(len(model.class_to_idx.items())):
@@ -176,9 +176,9 @@ def predict(image_path, model, topk):
     # transfer index to label
     label = []
     for i in range(5):
-        label.append(ind[index[i]])
+        label.append(ind[classes[i]])
 
-    return prob, index
+    return prob, classes
     
     
  #Testing 
