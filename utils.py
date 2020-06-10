@@ -2,7 +2,8 @@ import numpy as np
 import torch
 from torchvision import transforms, datasets,models
 from PIL import Image 
-
+import matplotlib.pyplot as plt
+import os
 import json
 
 
@@ -112,11 +113,12 @@ def get_class(classes, checkpoint, category_names):
             class_id.append(idx_to_class[i])
         return class_id    
     
-def show_classes(probs, classes, top_k):
+def show_classes(prob, classes, top_k):
+    
     print('--------Predictions for Image--------')
     i = 0
     while (i < top_k):
-        print('%*s. Class: %*s. Pr= %.4f'%(7, i+1, 3, classes[i], probabilities[i]))
+        print('%*s. Class: %*s. Pr= %.4f'%(7, i+1, 3, classes[i], prob[i]))
         i += 1
                                    
             
@@ -132,7 +134,7 @@ def network_model(arch):
         raise SystemExit
     
 def get_input_units(model, arch):
-    input_size = 0
+    input_units = 0
     
     if('vgg' in arch): return model.classifier[0].in_features
     elif('densenet' in arch): return model.classifier.in_features
@@ -140,7 +142,7 @@ def get_input_units(model, arch):
     elif(('resnet' in arch) or ('inception'in arch) ): return model.fc.in_features
     elif('alexnet' in arch): return model.classifier[1].in_features
         
-    if(input_size == 0): raise Error    
+    if(input_units == 0): raise Error    
     return input_units    
     
     

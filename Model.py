@@ -178,7 +178,7 @@ def predict(image_path, model, topk):
     for i in range(5):
         label.append(ind[index[i]])
 
-    return prob, label
+    return prob, index
     
     
  #Testing 
