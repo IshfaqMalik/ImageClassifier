@@ -36,13 +36,13 @@ probs, classes = Model.predict(img, model, args.top_k)
 
 
 
-classes = utils.get_class(classes, args.category_names)
+classes = utils.names(classes, args.category_names)
 
     
 
 #utils.resultdisplay(img, probs, classes, args.top_k)
 
-utils.show_classes(probs, classes, args.top_k)
+utils.rseults(probs, classes, args.top_k)
 
 
 

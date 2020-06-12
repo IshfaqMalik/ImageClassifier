@@ -63,7 +63,7 @@ def data_loader(data_dir):
     return train_data, valid_data, test_data, trainloader, validloader, testloader
 
 
-def resultdisplay(image, probs, classes, top_k):
+def display(image, probs, classes, top_k):
     #show image
     fig, ax = plt.subplots()
     # PyTorch tensors assume the color channel is the first dimension
@@ -98,7 +98,7 @@ def resultdisplay(image, probs, classes, top_k):
        
     return ax
 
-def get_class(classes,  category_names):
+def names (classes,  category_names):
     
     names = []
     
@@ -115,7 +115,7 @@ def get_class(classes,  category_names):
 
     
     
-def show_classes(prob, classes, top_k):
+def results(prob, classes, top_k):
     
     print('--------Predictions for Image--------')
     i = 0
