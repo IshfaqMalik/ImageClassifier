@@ -13,9 +13,9 @@ import numpy as np
 
 
     
-def network (input_units, output_units, hidden_units, drop_p):
+def network ( output_units, hidden_units, drop_p):
     classifier = nn.Sequential(OrderedDict([
-        ('fc1', nn.Linear(input_units, hidden_units)),
+        ('fc1', nn.Linear(25088, hidden_units)),
         ('relu', nn.ReLU()),
         ('dropout', nn.Dropout(p = drop_p)),
     
@@ -124,7 +124,7 @@ def load_model (file_path, gpu):
         
     checkpoint = torch.load(file_path)
     learning_rate = checkpoint['learning_rate']
-    model = utils.network_model(checkpoint['arch'])
+    model = getattr(models,checkpoint['arch'])(pretrained = True)
     model.classifier = checkpoint['classifier']
     model.optimizer = checkpoint['optimizer']
     model.load_state_dict(checkpoint['state_dict'])
@@ -167,16 +167,16 @@ def predict(image_path, model, topk):
     # 0 -> probabilities
     # 1 -> index
     prob = torch.topk(probabilities, topk)[0].tolist()[0] # probabilities
-    classes = torch.topk(probabilities, topk)[1].tolist()[0] # index
+    index = torch.topk(probabilities, topk)[1].tolist()[0] # index
     
     ind = []
     for i in range(len(model.class_to_idx.items())):
         ind.append(list(model.class_to_idx.items())[i][0])
 
     # transfer index to label
-    label = []
+    classes = []
     for i in range(5):
-        label.append(ind[classes[i]])
+        classes.append(ind[index[i]])
 
     return prob, classes
     
