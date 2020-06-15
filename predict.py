@@ -40,7 +40,7 @@ classes = utils.names(classes, args.category_names)
 
     
 
-#utils.resultdisplay(img, probs, classes, args.top_k)
+#utils.display(img, probs, classes, args.top_k)
 
 utils.rseults(probs, classes, args.top_k)
 

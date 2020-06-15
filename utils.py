@@ -115,7 +115,7 @@ def names (classes,  category_names):
 
     
     
-def results(prob, classes, top_k):
+def results(prob, classes, top_k): #The code is copied from Mati Kucz repository
     
     print('--------Predictions for Image--------')
     i = 0
