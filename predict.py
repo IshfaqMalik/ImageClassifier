@@ -40,9 +40,10 @@ classes = utils.names(classes, args.category_names)
 
     
 
-#utils.display(img, probs, classes, args.top_k)
+#utils.display(img, probs, classes, args.top_k) QXcbConnection: Could not connect to display :1
+#Aborted (core dumped)
 
-utils.rseults(probs, classes, args.top_k)
+utils.results(probs, classes, args.top_k)
 
 
 
